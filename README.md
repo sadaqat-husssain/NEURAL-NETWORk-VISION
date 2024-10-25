@@ -62,7 +62,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # Set parameters
 image_size = (48, 48)  # Size to which images will be resized
-batch_size = 15 # Number of images to process at a time
+batch_size = 32 # Number of images to process at a time
 
 
 # Image data generators
@@ -75,6 +75,19 @@ train_datagen = ImageDataGenerator(
      zoom_range=0.2,  # Randomly zoom in
      horizontal_flip=True,  # Randomly flip images
      fill_mode='nearest'  # Fill in new pixels with the nearest pixel values
+)
+
+#  Add brightness and contrast adjustments. Here's how to modify it:
+train_datagen = ImageDataGenerator(
+    rescale=1./255, 
+    rotation_range=20,  
+    width_shift_range=0.2,  
+    height_shift_range=0.2,  
+    shear_range=0.2,  
+    zoom_range=0.2,  
+    horizontal_flip=True,  
+    brightness_range=[0.8, 1.2],  # Adjust brightness
+    fill_mode='nearest'
 )
 
 test_datagen = ImageDataGenerator(rescale=1./255)  # Only normalize for testing
@@ -134,7 +147,7 @@ history = model.fit(
     steps_per_epoch=train_generator.samples // batch_size,
     validation_data=test_generator,
     validation_steps=test_generator.samples // batch_size,
-    epochs=20  # You can increase this for better performance
+    epochs=30  # You can increase this for better performance
 )
 # Evaluate the model on test data
 test_loss, test_accuracy = model.evaluate(test_generator)
